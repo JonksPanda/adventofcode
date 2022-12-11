@@ -2,14 +2,12 @@ def solution1(rows):
     calories = []
     temp = []
     for row in rows:
-        if row == '':
-            n = int()
-            for calorie in temp:
-                n += calorie
-            calories.append(n)
-            temp = []
-        else:
+        if row.isnumeric():
             temp.append(int(row))
+        else:
+            calories.append(sum(temp))
+            temp = []
+
     return max(calories)
 
 
@@ -17,41 +15,25 @@ def solution2(rows):
     calories = []
     temp = []
     for row in rows:
-        if row == '':
-            n = int()
-            for calorie in temp:
-                n += calorie
-            calories.append(n)
-            temp = []
-        else:
+        if row.isnumeric():
             temp.append(int(row))
+        else:
+            calories.append(sum(temp))
+            temp = []
     calories_sorted = sorted(calories)
     return calories_sorted[-1] + calories_sorted[-2] + calories_sorted[-3]
 
 
 def read_file(filename):
     with open(filename) as f:
-        rows = map(str.strip, f.readlines())
-        return rows
-
-
-def get_results(filename):
-    outputs = [0, 0]
-
-    rows = list(read_file(filename))
-
-    outputs[0] += solution1(rows)
-    outputs[1] += solution2(rows)
-
-    return outputs
+        return list(map(str.strip, f.readlines()))
 
 
 def main():
 
-    results = get_results("input.txt")
-
-    print(f"solution 1: {results[0]}")
-    print(f"solution 2: {results[1]}")
+    rows = read_file("input.txt")
+    print(f"solution 1: {solution1(rows)}")
+    print(f"solution 2: {solution2(rows)}")
 
 
 if __name__ == "__main__":

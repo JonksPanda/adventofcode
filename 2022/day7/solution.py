@@ -68,7 +68,6 @@ def solution1(rows):
 
 
 def solution2(rows):
-    total = 0
     path = ["/"]
     layer = 1
     max_layer = layer
@@ -117,7 +116,7 @@ def solution2(rows):
 
     return min(dir_sizes)
 
-
+    print(rows)
 def read_file(filename):
     with open(filename) as f:
         return list(map(str.strip, f.readlines()))
