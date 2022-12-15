@@ -3,17 +3,17 @@ def adjacent(head, tail):
     if (tail[0], tail[1]) == (head[0], head[1]):
         return True
     # checks if adjacent left or right
-    elif tail[0] == (head[0] + 1) or tail[0] == (head[0] - 1):
+    elif (tail[0] == (head[0] + 1) or tail[0] == (head[0] - 1)) and tail[1] == head[1]:
         return True
     # checks if adjacent down or up
-    elif tail[1] == (head[1] + 1) or tail[1] == (head[1] - 1):
+    elif (tail[1] == (head[1] + 1) or tail[1] == (head[1] - 1)) and tail[0] == head[0]:
         return True
     # checks if upper left/right
     elif (tail[1] == (head[1] + 1) and tail[0] == (head[0] + 1)) or (tail[1] == (head[1] + 1) and tail[0] == (head[0] - 1)):
         return True
     # check if lower left/right
-    # elif :
-    #     pass
+    elif (tail[1] == (head[1] - 1) and tail[0] == (head[0] + 1)) or (tail[1] == (head[1] - 1) and tail[0] == (head[0] - 1)):
+        return True
     else:
         return False
 
@@ -26,22 +26,29 @@ def solution1(rows):
     for row in rows:
         direction, steps = row.split(" ")
         steps = int(steps)
-        if direction == "D":
-            head[1] += steps
-        elif direction == "U":
-            head[1] -= steps
-        elif direction == "R":
-            head[0] += steps
-        elif direction == "L":
-            head[0] -= steps
-
-        print(adjacent(head, tail))
-
-        pos_tail = (tail[0], tail[1])
-        if (pos_tail) not in unique_positions:
-            print(pos_tail)
-            unique_positions.append(pos_tail)
-    return 0
+        for step in range(steps):
+            if direction == "D":
+                head[1] += 1
+            elif direction == "U":
+                head[1] -= 1
+            elif direction == "R":
+                head[0] += 1
+            elif direction == "L":
+                head[0] -= 1
+            if not adjacent(head, tail):
+                if tail[1] < head[1]:
+                    tail[1] += 1
+                if tail[1] > head[1]:
+                    tail[1] -= 1
+                if tail[0] < head[0]:
+                    tail[0] += 1
+                if tail[0] > head[0]:
+                    tail[0] -= 1
+            pos_tail = (tail[0], tail[1])
+            if pos_tail not in unique_positions:
+                print(pos_tail)
+                unique_positions.append(pos_tail)
+    return len(unique_positions)
 
 
 def solution2(rows):
