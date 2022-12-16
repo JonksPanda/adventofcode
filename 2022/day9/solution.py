@@ -46,15 +46,41 @@ def solution1(rows):
                     tail[0] -= 1
             pos_tail = (tail[0], tail[1])
             if pos_tail not in unique_positions:
-                print(pos_tail)
                 unique_positions.append(pos_tail)
     return len(unique_positions)
 
 
 def solution2(rows):
+    knots = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0],
+             [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+    unique_positions = []
     for row in rows:
-        pass
-    return 0
+        direction, steps = row.split(" ")
+        steps = int(steps)
+        for step in range(steps):
+            if direction == "D":
+                knots[0][1] += 1
+            elif direction == "U":
+                knots[0][1] -= 1
+            elif direction == "R":
+                knots[0][0] += 1
+            elif direction == "L":
+                knots[0][0] -= 1
+            for i in range(1, len(knots)):
+                if not adjacent(knots[i-1], knots[i]):
+                    if knots[i][1] < knots[i-1][1]:
+                        knots[i][1] += 1
+                    if knots[i][1] > knots[i-1][1]:
+                        knots[i][1] -= 1
+                    if knots[i][0] < knots[i-1][0]:
+                        knots[i][0] += 1
+                    if knots[i][0] > knots[i-1][0]:
+                        knots[i][0] -= 1
+            pos_tail = (knots[9][0], knots[9][1])
+            if pos_tail not in unique_positions:
+                print(pos_tail)
+                unique_positions.append(pos_tail)
+    return len(unique_positions)
 
 
 def read_file(filename):
