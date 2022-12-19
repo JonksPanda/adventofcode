@@ -21,21 +21,42 @@ def solution1(rows):
 
 def solution2(rows):
     x = 1
-    cycles = []
+    y = 0
+    count = 0
+    cycle = 0
     monitor = []
-    for i in range(5):
+    sprite = []
+    for i in range(6):
         temp = []
-        for i in range(39):
-            temp.append(".")
+        for i in range(40):
+            temp.append(" ")
         monitor.append(temp)
     for row in rows:
+        if count >= 40:
+            count = 0
+            cycle = 0
+            y += 1
+        sprite = [x-1, x, x+1]
         if row == "noop":
-            cycles.append(x)
+            if cycle in sprite:
+                monitor[y][cycle] = u"\u2588"
+            cycle += 1
+            count += 1
         else:
             for i in range(2):
-                cycles.append(x)
+                if count >= 40:
+                    count = 0
+                    cycle = 0
+                    y += 1
                 if i == 1:
                     x += int(row.split(" ")[1])
+                if cycle in sprite:
+                    monitor[y][cycle] = u"\u2588"
+                cycle += 1
+                count += 1
+
+    for y in monitor:
+        print(''.join(str(x) for x in y))
     return 0
 
 
