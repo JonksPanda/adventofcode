@@ -40,6 +40,15 @@ class Monkey:
         else:
             return item, self.if_false
 
+    def inspect_item_sol2(self, item):
+        item = self.use_operation(item)
+        if item >= 1000:
+            item = int(item/100)
+        if self.test_item(item):
+            return item, self.if_true
+        else:
+            return item, self.if_false
+
 
 def solution1(rows):
     monkeys = []
@@ -69,7 +78,6 @@ def solution1(rows):
             if_true = int()
             if_false = int()
     for i in range(20):
-        print(i)
         for monkey in monkeys:
             while len(monkey.items) >= 1:
                 if monkey.items == 0:
@@ -90,9 +98,50 @@ def solution1(rows):
 
 
 def solution2(rows):
+    monkeys = []
+    starting_items = []
+    operation = str()
+    test = str()
+    if_true = int()
+    if_false = int()
     for row in rows:
-        pass
-    return 0
+        if row.split(': ')[0] == "Starting items":
+            items = row.split(': ')[1].replace(',', '')
+            starting_items.extend(items.split(' '))
+        elif row.split(': ')[0] == "Operation":
+            operation = row.split(': ')[1].replace("new = ", "")
+        elif row.split(': ')[0] == "Test":
+            test = int(row.split(': ')[1].replace("divisible by ", ""))
+        elif row.split(': ')[0] == "If true":
+            if_true = int(row.split(': ')[1].replace("throw to monkey ", ''))
+        elif row.split(': ')[0] == "If false":
+            if_false = int(row.split(': ')[1].replace("throw to monkey ", ''))
+            monkeys.append(
+                Monkey(starting_items, operation, test, if_true, if_false))
+            # resets variables
+            starting_items = []
+            operation = str()
+            test = str()
+            if_true = int()
+            if_false = int()
+    for i in range(10000):
+        for monkey in monkeys:
+            while len(monkey.items) >= 1:
+                if monkey.items == 0:
+                    break
+                new, next = monkey.inspect_item_sol2(monkey.items[0])
+                monkey.items[0] = new
+                monkeys[next].items.append(monkey.items.pop(0))
+                monkey.times_inspected += 1
+    inspected = []
+    for monkey in monkeys:
+        inspected.append(monkey.times_inspected)
+    inspected.sort()
+    print(inspected)
+    print(f"{str(inspected[-1])} * {str(inspected[-2])}")
+    score = inspected[-1] * inspected[-2]
+
+    return score
 
 
 def read_file(filename):
