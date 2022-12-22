@@ -1,10 +1,44 @@
 class Monkey:
-    def __init__(self, starting_items: list, operation, test, if_true, if_false):
-        self.starting_items = starting_items
+    def __init__(self, items: list, operation, test, if_true, if_false):
+        self.items = items
         self.operation = operation
         self.test = test
         self.if_true = if_true
         self.if_false = if_false
+        self.times_inspected = 0
+
+    def check_var(self, var, item):
+        if var == 'old':
+            return int(item)
+        else:
+            return int(var)
+
+    def test_item(self, item):
+        if item % int(self.test) == 0:
+            return True
+        else:
+            return False
+
+    def use_operation(self, item):
+        a, operator, b = self.operation.split(" ")
+        a = self.check_var(a, item)
+        b = self.check_var(b, item)
+        if operator == "+":
+            return a + b
+        elif operator == "*":
+            return a * b
+        elif operator == "-":
+            return a - b
+        elif operator == "/":
+            return a/b
+
+    def inspect_item(self, item):
+        item = self.use_operation(item)
+        item = int(item/3)
+        if self.test_item(item):
+            return item, self.if_true
+        else:
+            return item, self.if_false
 
 
 def solution1(rows):
@@ -34,7 +68,25 @@ def solution1(rows):
             test = str()
             if_true = int()
             if_false = int()
-    return 0
+    for i in range(20):
+        print(i)
+        for monkey in monkeys:
+            while len(monkey.items) >= 1:
+                if monkey.items == 0:
+                    break
+                new, next = monkey.inspect_item(monkey.items[0])
+                monkey.items[0] = new
+                monkeys[next].items.append(monkey.items.pop(0))
+                monkey.times_inspected += 1
+    inspected = []
+    for monkey in monkeys:
+        inspected.append(monkey.times_inspected)
+    inspected.sort()
+    print(inspected)
+    print(f"{str(inspected[-1])} * {str(inspected[-2])}")
+    score = inspected[-1] * inspected[-2]
+
+    return score
 
 
 def solution2(rows):
