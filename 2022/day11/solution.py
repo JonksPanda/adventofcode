@@ -1,3 +1,6 @@
+import math
+
+
 class Monkey:
     def __init__(self, items: list, operation, test, if_true, if_false):
         self.items = items
@@ -42,8 +45,7 @@ class Monkey:
 
     def inspect_item_sol2(self, item):
         item = self.use_operation(item)
-        if item >= 1000:
-            item = int(item/100)
+        item = int(item)
         if self.test_item(item):
             return item, self.if_true
         else:
